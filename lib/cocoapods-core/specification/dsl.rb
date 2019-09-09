@@ -1280,6 +1280,26 @@ module Pod
                 :file_patterns => true,
                 :singularize => true
 
+      # @!method vendored_xcframeworks=(*frameworks)
+      #
+      #   The paths of the xcframework bundles that come shipped with the Pod.
+      #
+      #   @example
+      #
+      #     spec.ios.vendored_xcframeworks = 'XCFrameworks/MyFramework.xcframework'
+      #
+      #   @example
+      #
+      #     spec.ios.vendored_xcframeworks = 'XCFrameworks/MyFramework.xcframework'
+      #
+      #   @param  [String, Array<String>] vendored_xcframeworks
+      #           A list of library paths.
+      #
+      attribute :vendored_xcframeworks,
+                :container => Array,
+                :file_patterns => true,
+                :singularize => true
+
       #------------------#
 
       # @!method resource_bundles=(*resource_bundles)

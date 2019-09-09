@@ -182,6 +182,11 @@ module Pod
       #
       spec_attr_accessor :vendored_libraries
 
+      # @return [Array<String>] The paths of the xcframework bundles shipped with
+      #         the Pod.
+      #
+      spec_attr_accessor :vendored_xcframeworks
+
       # @return [Hash{String=>String}]]  hash where the keys are the names of
       #         the resource bundles and the values are their relative file
       #         patterns.

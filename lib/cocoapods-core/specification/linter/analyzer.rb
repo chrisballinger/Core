@@ -96,13 +96,13 @@ module Pod
         #
         def check_if_spec_is_empty
           methods = %w( source_files resources resource_bundles preserve_paths
-                        dependencies vendored_libraries vendored_frameworks )
+                        dependencies vendored_libraries vendored_frameworks vendored_xcframeworks)
           empty_patterns = methods.all? { |m| consumer.send(m).empty? }
           empty = empty_patterns && consumer.spec.subspecs.empty?
           if empty
             results.add_error('File Patterns', "The #{consumer.spec} spec is " \
               'empty (no source files, resources, resource_bundles, ' \
-              'preserve paths, vendored_libraries, vendored_frameworks, ' \
+              'preserve paths, vendored_libraries, vendored_frameworks, vendored_xcframeworks, ' \
               'dependencies, nor subspecs).')
           end
         end
