@@ -63,6 +63,33 @@ module Pod
         spec = Specification.new(nil, 'BananaLib')
         spec.to_pretty_json.should.end_with "\n"
       end
+
+      it 'can round-trip' do
+        spec = Specification.new do |s|
+          s.name = 'BananaLib'
+          s.platform = :ios, '9.0'
+          s.app_spec 'App'
+          s.test_spec 'Tests'
+          s.version = '17.0'
+          s.swift_versions = %w(5.0)
+        end
+
+        json = spec.to_pretty_json
+
+        loaded_spec = Specification.from_json(json)
+        new_json = loaded_spec.to_pretty_json
+
+        new_json.should.equal json
+      end
+
+      it 'maintains correct order of keys across versions' do
+        %w(14 15 16 17 18).each do |version|
+          json = File.read(File.expand_path("../../fixtures/CannonPodder#{version}.podspec.json", __FILE__))
+          loaded_spec = Specification.from_json(json)
+          new_json = loaded_spec.to_pretty_json
+          new_json.should.equal json
+        end
+      end
     end
 
     #-------------------------------------------------------------------------#
@@ -204,6 +231,55 @@ module Pod
         end
         hash = @spec.to_json
         hash.should.include '"name":"Tests","test_type":"ui"'
+      end
+
+      describe 'Dependency Configuration Support' do
+        it 'does not write the configuration whitelist for a pod if unspecified' do
+          @spec.dependency 'AFNetworking'
+          hash = @spec.to_hash
+          hash['configuration_pod_whitelist'].should.be.nil
+        end
+
+        it 'writes the array string configuration whitelist for a given pod' do
+          @spec.dependency 'AFNetworking', :configurations => ['Debug']
+          hash = @spec.to_hash
+          hash['configuration_pod_whitelist'].should == {
+            'AFNetworking' => [
+              'debug',
+            ],
+          }
+        end
+
+        it 'writes the array symbol configuration whitelist for a given pod' do
+          @spec.dependency 'AFNetworking', :configurations => [:debug]
+          hash = @spec.to_hash
+          hash['configuration_pod_whitelist'].should == {
+            'AFNetworking' => [
+              'debug',
+            ],
+          }
+        end
+
+        it 'writes the symbol configuration whitelist for a given pod' do
+          @spec.dependency 'AFNetworking', :configurations => :debug
+          hash = @spec.to_hash
+          hash['configuration_pod_whitelist'].should == {
+            'AFNetworking' => [
+              'debug',
+            ],
+          }
+        end
+
+        it 'loads the configuration whitelist for a pod' do
+          hash = {
+            'name' => 'BananaLib',
+            'version' => '1.0',
+            'dependencies' => { 'AFNetworking' => [] },
+            'configuration_pod_whitelist' => { 'AFNetworking' => ['debug'] },
+          }
+          result = Specification.from_hash(hash)
+          result.dependency_whitelisted_for_configuration?(Dependency.new('AFNetworking'), 'debug').should.be.true
+        end
       end
 
       it 'can be loaded from an hash' do
@@ -372,6 +448,17 @@ module Pod
           hash = @spec.to_hash
           hash['swift_versions'].should == ['1.0']
           hash['swift_version'].should == '1.0'
+        end
+
+        it 'does not alter the attribute hash when loading swift versions' do
+          @spec.swift_versions = ['4.2', '5.0']
+          first_hash = @spec.to_hash
+          first_hash['swift_versions'].should == ['4.2', '5.0']
+          first_hash['swift_version'].should == '5.0'
+          spec_from_hash = Specification.from_hash(first_hash)
+          second_hash = spec_from_hash.to_hash
+          second_hash['swift_versions'].should == ['4.2', '5.0']
+          second_hash['swift_version'].should == '5.0'
         end
 
         it 'reads swift version from a string' do

@@ -31,13 +31,17 @@ module Pod
         all_testspecs = specs_by_type[:test] || []
         all_subspecs = specs_by_type[:library] || []
 
+        hash.delete('testspecs')
         hash['testspecs'] = all_testspecs.map(&:to_hash) unless all_testspecs.empty?
+        hash.delete('appspecs')
         hash['appspecs'] = all_appspecs.map(&:to_hash) unless all_appspecs.empty?
+        hash.delete('subspecs')
         hash['subspecs'] = all_subspecs.map(&:to_hash) unless all_subspecs.empty?
 
         # Since CocoaPods 1.7 version the DSL has changed to be pluralized. When we serialize a podspec to JSON with
         # 1.7, ensure that we also include the singular version in the hash to maintain backwards compatibility with
-        # < 1.7 versions.
+        # < 1.7 versions. We also delete this key and re-add it to ensure it gets added at the end.
+        hash.delete('swift_version')
         hash['swift_version'] = swift_version.to_s unless swift_version.nil?
 
         hash

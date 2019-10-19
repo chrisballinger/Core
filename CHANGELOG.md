@@ -4,6 +4,11 @@
 
 ##### Enhancements
 
+* Add `:configurations` DSL for podspec dependencies.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#586](https://github.com/CocoaPods/Core/pull/586)
+
 * Expand `use_frameworks!` DSL to accept linkage style.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#581](https://github.com/CocoaPods/Core/pull/581)
@@ -11,6 +16,71 @@
 * Extend `script_phase` DSL to support dependency file.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#579](https://github.com/CocoaPods/Core/pull/579)
+
+##### Bug Fixes
+
+* None.  
+
+
+## 1.8.4 (2019-10-16)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* None.  
+
+
+## 1.8.3 (2019-10-04)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Follow up fix to [#595](https://github.com/CocoaPods/Core/pull/595) not to delete other hashes during serialization.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#598](https://github.com/CocoaPods/Core/pull/598)
+
+
+## 1.8.2 (2019-10-03)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Ensure that specs can round-trip to JSON byte-for-byte identical.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#595](https://github.com/CocoaPods/Core/pull/595)
+
+
+## 1.8.1 (2019-09-27)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Do not alter `swift_versions` attribute when calculating Swift versions.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#592](https://github.com/CocoaPods/Core/pull/592)
+
+* Update `concurrent-ruby` gem dependency to '\~> 1.1'.  
+  [Igor Makarov](https://github.com/igor-makarov)
+  [#591](https://github.com/CocoaPods/Core/pull/591)
+
+
+## 1.8.0 (2019-09-23)
+
+##### Enhancements
+
+* None.  
 
 ##### Bug Fixes
 
